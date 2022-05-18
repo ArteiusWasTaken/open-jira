@@ -1,7 +1,9 @@
 import { FC, useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { Entry } from "../../interfaces";
+
 import { EntriesContext, entriesReducer } from "./";
-import { v4 } from "uuid";
 
 export interface EntriesState {
   entries: Entry[];
@@ -10,24 +12,26 @@ export interface EntriesState {
 interface Props {
   children?: React.ReactNode | undefined;
 }
-
 const Entries_INITIAL_STATE: EntriesState = {
   entries: [
     {
-      _id: v4(),
-      description: "Pendiente: Fugiat ex elit enim mollit laboris.",
+      _id: uuidv4(),
+      description:
+        "Pendiente: Proident dolor duis elit sunt qui dolor laborum veniam ea laboris qui consequat.",
       status: "pending",
       createdAt: Date.now(),
     },
     {
-      _id: v4(),
-      description: "En-Progreso: Culpa incididunt pariatur quis exercitation.",
+      _id: uuidv4(),
+      description:
+        "En-Progreso Veniam in cupidatat adipisicing Lorem sunt est est ex cillum laboris fugiat officia fugiat.",
       status: "in-progress",
       createdAt: Date.now() - 1000000,
     },
     {
-      _id: v4(),
-      description: "Terminadoas: Nisi esse excepteur qui et eu commodo mollit.",
+      _id: uuidv4(),
+      description:
+        "Terminadas: Commodo veniam aliqua tempor officia officia non laborum.",
       status: "finished",
       createdAt: Date.now() - 100000,
     },
@@ -39,7 +43,7 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
 
   const addNewEntry = (description: string) => {
     const newEntry: Entry = {
-      _id: v4(),
+      _id: uuidv4(),
       description,
       createdAt: Date.now(),
       status: "pending",
@@ -48,13 +52,18 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
     dispatch({ type: "[Entry] Add-Entry", payload: newEntry });
   };
 
+  const updateEntry = (entry: Entry) => {
+    dispatch({ type: "[Entry] Entry-Updated", payload: entry });
+  };
+
   return (
     <EntriesContext.Provider
       value={{
         ...state,
 
-        //Methods
+        // Methods
         addNewEntry,
+        updateEntry,
       }}
     >
       {children}
