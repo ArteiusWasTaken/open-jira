@@ -3,6 +3,7 @@ import React, { FC, useContext, useMemo } from "react";
 import { EntriesContext } from "../../context/entries";
 import { EntryStatus } from "../../interfaces";
 import { EntryCard } from "./EntryCard";
+import { DragEvent } from "react";
 
 interface Props {
   status: EntryStatus;
@@ -16,8 +17,15 @@ export const EnryList: FC<Props> = ({ status }) => {
     [entries]
   );
 
+  const onDropEntry = (event: DragEvent<HTMLDivElement>) => {
+    const id = event.dataTransfer.getData("text");
+  };
+
+  const allowDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
   return (
-    <div>
+    <div onDrop={onDropEntry} onDragOver={allowDrop}>
       <Paper
         sx={{
           height: "calc(100vh - 180px)",
