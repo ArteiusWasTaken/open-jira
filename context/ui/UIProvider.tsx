@@ -1,61 +1,58 @@
-import { FC, useReducer } from "react";
-import { UIContext, uiReducer } from "./";
+import { FC, useReducer } from 'react';
+import { UIContext, uiReducer } from './';
 
 export interface UIState {
-  sidemenuOpen: boolean;
-  isAddingEntry: boolean;
-  isDragging: boolean;
+    sidemenuOpen: boolean;
+    isAddingEntry: boolean;
+    isDragging: boolean;
 }
 
-interface Props {
-  children?: React.ReactNode | undefined;
-}
 
 const UI_INITIAL_STATE: UIState = {
-  sidemenuOpen: false,
-  isAddingEntry: false,
-  isDragging: false,
-};
+    sidemenuOpen: false,
+    isAddingEntry: false,
+    isDragging: false,
+}
 
-export const UIProvider: FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
 
-  const openSideMenu = () => {
-    dispatch({ type: "UI - Open Sidebar" });
-  };
+export const UIProvider:FC = ({ children }) => {
 
-  const closeSideMenu = () => {
-    dispatch({ type: "UI - Close Sidebar" });
-  };
+    const [state, dispatch] = useReducer( uiReducer, UI_INITIAL_STATE );
 
-  const setIsAddingEntry = (isAdding: boolean) => {
-    dispatch({ type: "UI - Set isAddingEntry", payload: isAdding });
-  };
 
-  const startDragging = () => {
-    dispatch({ type: "UI - Start Dragging" });
-  };
+    const openSideMenu = () => {
+        dispatch({ type: 'UI - Open Sidebar' });
+    }
 
-  const endDragging = () => {
-    dispatch({ type: "UI - End Dragging" });
-  };
+    const closeSideMenu = () => dispatch({ type: 'UI - Close Sidebar' })
 
-  return (
-    <UIContext.Provider
-      value={{
-        ...state,
+    const setIsAddingEntry = ( isAdding: boolean ) => {
+        dispatch({ type:'UI - Set isAddingEntry', payload: isAdding });
+    }
 
-        //Methods
-        openSideMenu,
-        closeSideMenu,
+    const startDragging = () => {
+        dispatch({ type: 'UI - Start Dragging' });
+    }
 
-        setIsAddingEntry,
+    const endDragging = () => {
+        dispatch({ type: 'UI - End Dragging' });
+    }
 
-        startDragging,
-        endDragging,
-      }}
-    >
-      {children}
-    </UIContext.Provider>
-  );
+
+    return (
+        <UIContext.Provider value={{
+            ...state,
+
+            // Methods
+            closeSideMenu,
+            openSideMenu,
+            
+            setIsAddingEntry,
+
+            endDragging,
+            startDragging,
+        }}>
+            { children }
+        </UIContext.Provider>
+    )
 };
