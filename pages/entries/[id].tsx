@@ -31,7 +31,10 @@ export const EntryPage = () => {
     setInputValue(event.target.value);
   };
 
-  const onStatusChanged = (event: ChangeEvent<HTMLInputElement>) => {};
+  const onStatusChanged = (event: ChangeEvent<HTMLInputElement>) => {
+    setStatus(event.target.value as EntryStatus);
+  };
+  const onSave = () => {};
 
   return (
     <Layout title=" ... ... ... ">
@@ -55,7 +58,7 @@ export const EntryPage = () => {
               />
               <FormControl>
                 <FormLabel>Estado: </FormLabel>
-                <RadioGroup row>
+                <RadioGroup row value={status} onChange={onStatusChanged}>
                   {validStatus.map((option) => (
                     <FormControlLabel
                       key={option}
@@ -72,6 +75,7 @@ export const EntryPage = () => {
                 startIcon={<SaveOutlinedIcon />}
                 variant="contained"
                 fullWidth
+                onClick={onSave}
               >
                 Save
               </Button>
