@@ -18,7 +18,8 @@ import { Layout } from "../../components/layouts";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { EntryStatus } from "../../interfaces";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
+import { GetServerSideProps } from "next";
 
 const validStatus: EntryStatus[] = ["pending", "in-progress", "finished"];
 
@@ -26,6 +27,11 @@ export const EntryPage = () => {
   const [inputValue, setInputValue] = useState("");
   const [status, setStatus] = useState<EntryStatus>("pending");
   const [touched, setTouched] = useState(false);
+
+  const isNotValid = useMemo(
+    () => inputValue.length <= 0 && touched,
+    [inputValue, touched]
+  );
 
   const onInputValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -55,7 +61,11 @@ export const EntryPage = () => {
                 label="Nueva entrada"
                 value={inputValue}
                 onChange={onInputValueChange}
+                helperText={isNotValid && "Ingrese un Valor"}
+                onBlur={() => setTouched(true)}
+                error={isNotValid}
               />
+
               <FormControl>
                 <FormLabel>Estado: </FormLabel>
                 <RadioGroup row value={status} onChange={onStatusChanged}>
@@ -76,6 +86,7 @@ export const EntryPage = () => {
                 variant="contained"
                 fullWidth
                 onClick={onSave}
+                disabled={inputValue.length <= 0}
               >
                 Save
               </Button>
@@ -95,6 +106,12 @@ export const EntryPage = () => {
       </IconButton>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {},
+  };
 };
 
 export default EntryPage;
